@@ -32,7 +32,7 @@ def main():
                 pygame.quit()
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LCTRL and len(yellow_bullets) < MAX_BULLETS:
+                if event.key == pygame.K_SPACE and len(yellow_bullets) < MAX_BULLETS:
                     bullet = pygame.Rect(yellow.x + yellow.width, yellow.y + yellow.height//2 - 2, 10, 5)
                     yellow_bullets.append(bullet)
                     BULLET_FIRE_SOUND.play()
@@ -61,7 +61,7 @@ def main():
 
         keys_pressed = pygame.key.get_pressed()
         pySpaceShooter.yellow_handle_movement(keys_pressed, yellow)
-        pySpaceShooter.red_handle_movement(keys_pressed, red)
+        pySpaceShooter.red_ai_handle_movement(yellow_bullets, red, yellow)
 
         pySpaceShooter.handle_bullets(yellow_bullets, red_bullets, yellow, red)
 

@@ -66,15 +66,36 @@ def yellow_handle_movement(keys_pressed, yellow):
         yellow.y += VEL
 
 
-def red_handle_movement(keys_pressed, red):
-    if keys_pressed[pygame.K_LEFT] and red.x - VEL > BORDER.x + BORDER.width:  # LEFT
-        red.x -= VEL
-    if keys_pressed[pygame.K_RIGHT] and red.x + VEL + red.width < WIDTH + 15:  # RIGHT
-        red.x += VEL
-    if keys_pressed[pygame.K_UP] and red.y - VEL > 0:  # UP
+def red_ai_handle_movement(yellow_bullets, red, yellow):
+    moving_flag = 0  # so that the ai doesn't move twice at a time breaking velocity limits
+
+    '''
+    direction = 0
+    if red.y > 100 and direction == 0:
         red.y -= VEL
-    if keys_pressed[pygame.K_DOWN] and red.y + VEL + red.height < HEIGHT - 15:  # DOWN
+    direction += 1
+    if red.y < 450 and direction != 0:
         red.y += VEL
+    direction -= 1
+    '''
+
+    # dodging bullets
+    for bullet in yellow_bullets:
+        #  if bullet is in front of spaceship,
+        if (200 > red.x - bullet.x > 0) and abs(red.y + SPACESHIP_HEIGHT / 2 - bullet.y) < 50 and moving_flag == 0:
+            moving_flag += 1
+            if red.y + SPACESHIP_HEIGHT/2 - bullet.y > 0:  # bullet above centre of spaceship , go down
+                if red.y + VEL + red.height < HEIGHT - 15:
+                    red.y += VEL
+                else:
+                    red.y -= VEL        # if at the borders, go opposite direction
+            elif red.y + SPACESHIP_HEIGHT/2 - bullet.y < 0:  # bullet below centre of spaceship , go up
+                if red.y - VEL > 0:
+                    red.y -= VEL
+                else:
+                    red.y += VEL       # if at the borders, go opposite direction
+            else:
+                moving_flag -= 1
 
 
 def handle_bullets(yellow_bullets, red_bullets, yellow, red):
