@@ -22,6 +22,8 @@ def main():
     red_health = 10
     yellow_health = 10
 
+    direction = 0
+
     clock = pygame.time.Clock()
     run = True
     while run:
@@ -58,13 +60,18 @@ def main():
         if winner_text != "":
             pySpaceShooter.draw_winner(winner_text)
             break
-
         keys_pressed = pygame.key.get_pressed()
         pySpaceShooter.yellow_handle_movement(keys_pressed, yellow)
-        pySpaceShooter.red_ai_handle_movement(yellow_bullets, red, yellow)
 
+        if red.y < 50 and direction == 0:
+            direction = 1
+        elif red.y > 420 and direction == 1:
+            direction = 0
+        elif red.y > 50 and direction == 0:
+            direction = 0
+
+        pySpaceShooter.red_ai_handle_movement(yellow_bullets, red, direction)
         pySpaceShooter.handle_bullets(yellow_bullets, red_bullets, yellow, red)
-
         pySpaceShooter.draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_health)
 
     main()

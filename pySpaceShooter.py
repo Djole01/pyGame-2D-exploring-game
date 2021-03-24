@@ -66,23 +66,13 @@ def yellow_handle_movement(keys_pressed, yellow):
         yellow.y += VEL
 
 
-def red_ai_handle_movement(yellow_bullets, red, yellow):
+def red_ai_handle_movement(yellow_bullets, red, direction):
     moving_flag = 0  # so that the ai doesn't move twice at a time breaking velocity limits
-
-    '''
-    direction = 0
-    if red.y > 100 and direction == 0:
-        red.y -= VEL
-    direction += 1
-    if red.y < 450 and direction != 0:
-        red.y += VEL
-    direction -= 1
-    '''
 
     # dodging bullets
     for bullet in yellow_bullets:
         #  if bullet is in front of spaceship,
-        if (200 > red.x - bullet.x > 0) and abs(red.y + SPACESHIP_HEIGHT / 2 - bullet.y) < 50 and moving_flag == 0:
+        if (200 > red.x - bullet.x > -SPACESHIP_WIDTH) and abs(red.y + SPACESHIP_HEIGHT / 2 - bullet.y) < 50 and moving_flag == 0:
             moving_flag += 1
             if red.y + SPACESHIP_HEIGHT/2 - bullet.y > 0:  # bullet above centre of spaceship , go down
                 if red.y + VEL + red.height < HEIGHT - 15:
@@ -96,6 +86,11 @@ def red_ai_handle_movement(yellow_bullets, red, yellow):
                     red.y += VEL       # if at the borders, go opposite direction
             else:
                 moving_flag -= 1
+
+    if direction == 0 and moving_flag == 0:
+        red.y -= VEL
+    elif direction == 1 and moving_flag == 0:
+        red.y += VEL
 
 
 def handle_bullets(yellow_bullets, red_bullets, yellow, red):
