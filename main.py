@@ -1,19 +1,22 @@
 import pygame
 import os
 import pySpaceShooter
+import random
 
-pygame.display.set_caption("First Game!")
+pygame.display.set_caption("Space Shooter")
 
 pygame.mixer.init()
 BULLET_HIT_SOUND = pygame.mixer.Sound(os.path.join(('Assets'), 'Grenade.wav'))
 BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join(('Assets'), 'Gun.wav'))
 
 FPS = 60
-MAX_BULLETS = 3
+MAX_BULLETS = 10
+HEIGHT = pySpaceShooter.HEIGHT
+WIDTH = pySpaceShooter.WIDTH
 
 
 def main():
-    red = pygame.Rect(700, 300, pySpaceShooter.SPACESHIP_WIDTH, pySpaceShooter.SPACESHIP_HEIGHT)
+    red = pygame.Rect(750, 500, pySpaceShooter.SPACESHIP_WIDTH, pySpaceShooter.SPACESHIP_HEIGHT)
     yellow = pygame.Rect(100, 300, pySpaceShooter.SPACESHIP_WIDTH, pySpaceShooter.SPACESHIP_HEIGHT)
 
     red_bullets = []
@@ -62,13 +65,22 @@ def main():
             break
         keys_pressed = pygame.key.get_pressed()
         pySpaceShooter.yellow_handle_movement(keys_pressed, yellow)
-
+        '''
         if red.y < 50 and direction == 0:
             direction = 1
         elif red.y > 420 and direction == 1:
             direction = 0
         elif red.y > 50 and direction == 0:
-            direction = 0
+            direction = 0'''
+
+        if red.x < WIDTH//2:
+            direction = random.choice([1, 2])
+        elif red.x > WIDTH - pySpaceShooter.SPACESHIP_WIDTH:
+            direction = random.choice([0, 3])
+        elif red.y < 0:
+            direction = random.choice([2, 3])
+        elif red.y > HEIGHT - pySpaceShooter.SPACESHIP_HEIGHT - 15:
+            direction = random.choice([0, 1])
 
         pySpaceShooter.red_ai_handle_movement(yellow_bullets, red, direction)
         pySpaceShooter.handle_bullets(yellow_bullets, red_bullets, yellow, red)

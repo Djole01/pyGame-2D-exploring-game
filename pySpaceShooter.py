@@ -2,7 +2,7 @@ import pygame
 import os
 pygame.font.init()
 
-WIDTH, HEIGHT = 900, 500
+WIDTH, HEIGHT = 1000, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 BORDER = pygame.Rect(WIDTH//2 - 5, 0, 10, HEIGHT)
@@ -38,8 +38,8 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_hea
     WIN.blit(SPACE, (0, 0))
     pygame.draw.rect(WIN, BLACK, BORDER)
 
-    red_health_text = HEALTH_FONT.render("Health: " + str(red_health), 1, WHITE)
-    yellow_health_text = HEALTH_FONT.render("Health: " + str(yellow_health), 1, WHITE)
+    red_health_text = HEALTH_FONT.render("Health: " + str(red_health), True, WHITE)
+    yellow_health_text = HEALTH_FONT.render("Health: " + str(yellow_health), True, WHITE)
     WIN.blit(red_health_text, (WIDTH - red_health_text.get_width() - 10, 10))
     WIN.blit(yellow_health_text, (10, 10))
 
@@ -72,7 +72,8 @@ def red_ai_handle_movement(yellow_bullets, red, direction):
     # dodging bullets
     for bullet in yellow_bullets:
         #  if bullet is in front of spaceship,
-        if (200 > red.x - bullet.x > -SPACESHIP_WIDTH) and abs(red.y + SPACESHIP_HEIGHT / 2 - bullet.y) < 50 and moving_flag == 0:
+        if (100 > red.x - bullet.x > -SPACESHIP_WIDTH) and abs(red.y + SPACESHIP_HEIGHT / 2 - bullet.y) < 50 \
+                and moving_flag == 0:
             moving_flag += 1
             if red.y + SPACESHIP_HEIGHT/2 - bullet.y > 0:  # bullet above centre of spaceship , go down
                 if red.y + VEL + red.height < HEIGHT - 15:
@@ -89,8 +90,16 @@ def red_ai_handle_movement(yellow_bullets, red, direction):
 
     if direction == 0 and moving_flag == 0:
         red.y -= VEL
+        red.x -= VEL
     elif direction == 1 and moving_flag == 0:
+        red.y -= VEL
+        red.x += VEL
+    elif direction == 2 and moving_flag == 0:
         red.y += VEL
+        red.x += VEL
+    elif direction == 3 and moving_flag == 0:
+        red.y += VEL
+        red.x -= VEL
 
 
 def handle_bullets(yellow_bullets, red_bullets, yellow, red):
@@ -112,7 +121,7 @@ def handle_bullets(yellow_bullets, red_bullets, yellow, red):
 
 
 def draw_winner(text):
-    draw_text = WINNER_FONT.render(text, 1, WHITE)
+    draw_text = WINNER_FONT.render(text, True, WHITE)
     WIN.blit(draw_text, (WIDTH/2 - draw_text.get_width() /
                          2, HEIGHT/2 - draw_text.get_height()/2))
     pygame.display.update()
