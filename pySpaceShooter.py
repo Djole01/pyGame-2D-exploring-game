@@ -17,7 +17,7 @@ WINNER_FONT = pygame.font.SysFont('comicsans', 100)
 
 VEL = 5
 SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 40
-BULLET_VEL = 7
+BULLET_VEL = 8
 
 YELLOW_SPACESHIP_IMAGE = pygame.image.load(
     os.path.join('Assets', 'spaceship_yellow.png'))
@@ -118,6 +118,12 @@ def handle_bullets(yellow_bullets, red_bullets, yellow, red):
             red_bullets.remove(bullet)
         elif bullet.x < 0:
             red_bullets.remove(bullet)
+
+    for bullet1 in red_bullets:
+        for bullet2 in yellow_bullets:
+            if abs(bullet1.x - bullet2.x) < 15 and abs(bullet1.y - bullet2.y) < 15:
+                red_bullets.remove(bullet1)
+                yellow_bullets.remove(bullet2)
 
 
 def draw_winner(text):

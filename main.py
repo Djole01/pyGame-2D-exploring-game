@@ -10,7 +10,7 @@ BULLET_HIT_SOUND = pygame.mixer.Sound(os.path.join(('Assets'), 'Grenade.wav'))
 BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join(('Assets'), 'Gun.wav'))
 
 FPS = 60
-MAX_BULLETS = 10
+MAX_BULLETS = 4
 HEIGHT = pySpaceShooter.HEIGHT
 WIDTH = pySpaceShooter.WIDTH
 
@@ -42,10 +42,10 @@ def main():
                     yellow_bullets.append(bullet)
                     BULLET_FIRE_SOUND.play()
 
-                if event.key == pygame.K_RCTRL and len(red_bullets) < MAX_BULLETS:
-                    bullet = pygame.Rect(red.x, red.y + red.height//2 - 2, 10, 5)
-                    red_bullets.append(bullet)
-                    BULLET_FIRE_SOUND.play()
+            if abs(red.y - yellow.y) < 200 and len(red_bullets) < MAX_BULLETS:
+                bullet = pygame.Rect(red.x, red.y + red.height//2 - 2, 10, 5)
+                red_bullets.append(bullet)
+                BULLET_FIRE_SOUND.play()
 
             if event.type == pySpaceShooter.RED_HIT:
                 red_health -= 1
@@ -65,14 +65,8 @@ def main():
             break
         keys_pressed = pygame.key.get_pressed()
         pySpaceShooter.yellow_handle_movement(keys_pressed, yellow)
-        '''
-        if red.y < 50 and direction == 0:
-            direction = 1
-        elif red.y > 420 and direction == 1:
-            direction = 0
-        elif red.y > 50 and direction == 0:
-            direction = 0'''
 
+        # Ai's direction of movement
         if red.x < WIDTH//2:
             direction = random.choice([1, 2])
         elif red.x > WIDTH - pySpaceShooter.SPACESHIP_WIDTH:
